@@ -1,6 +1,6 @@
 class Game < ApplicationRecord
   after_create :generate_game_details
-  after_save :create_result
+  after_create :create_result
 
   validates :token, uniqueness: true
 
