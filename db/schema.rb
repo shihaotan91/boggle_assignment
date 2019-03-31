@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 2019_03_31_082516) do
   enable_extension "plpgsql"
 
   create_table "games", force: :cascade do |t|
-    t.boolean "completed"
+    t.boolean "completed", default: false
     t.datetime "start_time"
     t.datetime "end_time"
     t.string "token"
