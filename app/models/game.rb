@@ -1,5 +1,6 @@
 class Game < ApplicationRecord
   after_create :generate_game_details
+  after_save :create_result
 
   validates :token, uniqueness: true
 
@@ -25,5 +26,9 @@ class Game < ApplicationRecord
     time_now = DateTime.now
     self.start_time = time_now
     self.end_time = time_now + 180.seconds
+  end
+
+  def create_result
+    Result.create(game_id: id)
   end
 end
