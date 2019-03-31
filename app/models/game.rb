@@ -1,4 +1,6 @@
 class Game < ApplicationRecord
+  DICTIONARY_DETAILS = 'dictionary_details'.freeze
+
   after_create :generate_game_details
   after_create :create_result
 
