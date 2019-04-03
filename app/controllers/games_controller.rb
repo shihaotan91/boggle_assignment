@@ -15,10 +15,10 @@ class GamesController < ApplicationController
   def play
     game = Game.find_by(token: game_params[:token])
     if game
-      response = Game::CheckAnswer(game, result, game_params[:answer])
+      response = GameBoard::ValidateAnswer.new(game, game_params[:answer])
       render json: response, status: :ok
     else
-      error = "Invalid game token"
+      error = 'Invalid game token'
       render json: error, status: :unprocessable_entity
     end
   end
