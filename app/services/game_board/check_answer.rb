@@ -1,22 +1,9 @@
 module GameBoard
-  class CheckAnswer
-    def initialize(game, result, answer)
-      @game = game
-      @result = result
-      @answer = answer
-      @response = { errors: [] }
-      @dictionary_details = Rails.cache.fetch(Game::DICTIONARY_DETAILS)
-      @position_neighbours = I18n.t('games.board_position_neighbour')
-
-      validate_answer
-    end
-
-    def validate_answer
+  module CheckAnswer
+    def check_answer
       check_for_invalid_characters
       check_answer_length
-      check_duplicated_answers
-
-      return @response[:errors] unless @response[:errors].empty?
+      # check_duplicated_answers
     end
 
     def check_for_invalid_characters
