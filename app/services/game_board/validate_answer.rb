@@ -8,6 +8,7 @@ module GameBoard
       @board = game.board
       @result = result
       @answer = answer
+      @found = false
       @response = { errors: [] }
       dictionary_details = Rails.cache.fetch(Game::DICTIONARY_DETAILS)
 
@@ -17,9 +18,7 @@ module GameBoard
     def validate_answer(dictionary_details)
       check_answer(dictionary_details)
       return @response[:errors] unless @response[:errors].empty?
-
-      found = find_answer
-      debugger
+      find_answer
     end
   end
 end

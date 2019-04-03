@@ -2,7 +2,8 @@ module GameBoard
   module FindAnswer
     def find_answer
       starting_coordinates.each do |coord|
-        restore_board
+        break if @found
+        restore_board_and_letter_index
         find_letter_on_board(neighbours(coord), coord)
       end
     end
@@ -36,25 +37,27 @@ module GameBoard
       remove_coordinate_from_board(current_coord)
 
       neighbours.each do |neighbour|
+        break if @found
+
         neighbour_letter = @board[neighbour[0]][neighbour[1]]
-        next if neighbour_letter == nil
+        next if neighbour_letter.nil?
+
         if [@answer[@answer_letter_index], '*'].include? neighbour_letter
           if @answer_letter_index == @answer.length - 1
-            break true
+            @found = true
           else
             @answer_letter_index += 1
             find_letter_on_board(neighbours(neighbour), neighbour)
           end
         end
       end
-      false
     end
 
     def remove_coordinate_from_board(coordinate)
       @board[coordinate[0]][coordinate[1]] = nil
     end
 
-    def restore_board
+    def restore_board_and_letter_index
       @answer_letter_index = 1
       @board = @game.board
     end
