@@ -1,10 +1,18 @@
 class GamesController < ApplicationController
+  def show
+    @game = Game.find_by(token: params[:token])
+    respond_to do |format|
+      format.html { render template: 'games/show' }
+      format.json { render json: @game.to_json, status: :ok }
+    end
+  end
+
   def create
-    new_game = Game.create
-    if new_game
+    @new_game = Game.create
+    if @new_game
       new_game_json = {
-        board: new_game.board,
-        token: new_game.token
+        board: @new_game.board,
+        token: @new_game.token
       }
       render json: new_game_json, status: :created
     else

@@ -1,6 +1,7 @@
 module GameBoard
   module FindAnswer
     def find_answer
+      @board = @game.board
       @used_coordinates = []
       @answer_letter_index = 0
 
@@ -39,29 +40,25 @@ module GameBoard
     def find_letter_on_board(neighbours, current_coord)
       valid_neighbours = neighbours - @used_coordinates
 
-      puts "valid_neighbours: #{valid_neighbours}"
-      puts "used_coords: #{@used_coordinates}"
-
       valid_neighbours.each do |neighbour|
         mark_used_coordinate_from_board(current_coord)
         break if @found
-        neighbour_letter = @board[neighbour[0]][neighbour[1]]
-        puts "current_index: #{@answer_letter_index}"
-        puts "neighbour_letter: #{neighbour_letter}, coord: #{neighbour}"
 
-        if letter_matches(neighbour_letter)
+        if letter_matches(board_letter(neighbour))
           if last_letter_of_answer
             @found = true
           else
-            puts "found"
             @answer_letter_index += 1
             find_letter_on_board(neighbours(neighbour), neighbour)
           end
         end
       end
-      puts "restored"
       restore_used_coordinates
       restore_letter_index
+    end
+
+    def board_letter(coordinates)
+      @board[coordinates[0]][coordinates[1]]
     end
 
     def mark_used_coordinate_from_board(coordinate)
