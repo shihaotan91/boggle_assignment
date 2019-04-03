@@ -1,9 +1,9 @@
 module GameBoard
   module CheckAnswer
-    def check_answer
+    def check_answer(dictionary_details)
       check_for_invalid_characters
-      check_answer_length
-      # check_duplicated_answers
+      check_answer_length(dictionary_details)
+      check_duplicated_answers
     end
 
     def check_for_invalid_characters
@@ -13,9 +13,9 @@ module GameBoard
       end
     end
 
-    def check_answer_length
-      min_length = @dictionary_details[:min_length]
-      max_length = @dictionary_details[:max_length]
+    def check_answer_length(dictionary_details)
+      min_length = dictionary_details[:min_length]
+      max_length = dictionary_details[:max_length]
       unless @answer.length.between?(min_length, max_length)
         @response[:errors] << "Word length must be between #{min_length} and #{max_length}"
       end

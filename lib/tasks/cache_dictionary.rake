@@ -16,7 +16,6 @@ namespace :game do
     }
 
     cache_key = Game::DICTIONARY_DETAILS
-    debugger
     Rails.cache.write(cache_key, dictionary_details)
   end
 end
