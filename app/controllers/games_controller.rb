@@ -2,7 +2,11 @@ class GamesController < ApplicationController
   def create
     new_game = Game.create
     if new_game
-      render json: new_game.board, status: :created
+      new_game_json = {
+        board: new_game.board,
+        token: new_game.token
+      }
+      render json: new_game_json, status: :created
     else
       render json: new_game.errors, status: :unprocessable_entity
     end
@@ -11,7 +15,6 @@ class GamesController < ApplicationController
   def play
     game = Game.find_by(token: game_params[:token])
     if game
-      result = Result.find_by(game_id: game.id)
       response = Game::CheckAnswer(game, result, game_params[:answer])
       render json: response, status: :ok
     else
