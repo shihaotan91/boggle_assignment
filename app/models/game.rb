@@ -17,7 +17,7 @@ class Game < ApplicationRecord
     possible_letters = ('A'..'Z').to_a
     wildcards = ['*', '*']
     letters_board = (0..13).map { possible_letters[rand(26)] } + wildcards
-    self.board = letters_board.shuffle
+    self.board = letters_board.shuffle.each_slice(4).to_a
   end
 
   def generate_token
