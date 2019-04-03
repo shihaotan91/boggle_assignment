@@ -2,6 +2,7 @@ module GameBoard
   module FindAnswer
     def find_answer
       @used_coordinates = []
+      @answer_letter_index = 0
 
       starting_coordinates.each do |coord|
         break if @found
@@ -15,7 +16,7 @@ module GameBoard
 
       @board.each_with_index do |row, row_index|
         row.each_with_index do |letter, letter_index|
-          if [@answer[0], '*'].include? letter
+          if letter_matches(letter)
             starting_coordinates << [row_index, letter_index]
           end
         end
@@ -36,24 +37,31 @@ module GameBoard
     end
 
     def find_letter_on_board(neighbours, current_coord)
-      mark_used_coordinate_from_board(current_coord)
+      valid_neighbours = neighbours - @used_coordinates
 
-      neighbours.each do |neighbour|
+      puts "valid_neighbours: #{valid_neighbours}"
+      puts "used_coords: #{@used_coordinates}"
+
+      valid_neighbours.each do |neighbour|
+        mark_used_coordinate_from_board(current_coord)
         break if @found
-        next if @used_coordinates.include? neighbour
-
         neighbour_letter = @board[neighbour[0]][neighbour[1]]
+        puts "current_index: #{@answer_letter_index}"
+        puts "neighbour_letter: #{neighbour_letter}, coord: #{neighbour}"
 
-        if [@answer[@answer_letter_index], '*'].include? neighbour_letter
-          if @answer_letter_index == @answer.length - 1
+        if letter_matches(neighbour_letter)
+          if last_letter_of_answer
             @found = true
           else
+            puts "found"
             @answer_letter_index += 1
             find_letter_on_board(neighbours(neighbour), neighbour)
           end
         end
-        restore_used_coordinates
       end
+      puts "restored"
+      restore_used_coordinates
+      restore_letter_index
     end
 
     def mark_used_coordinate_from_board(coordinate)
@@ -66,6 +74,14 @@ module GameBoard
 
     def restore_used_coordinates
       @used_coordinates = []
+    end
+
+    def last_letter_of_answer
+      @answer_letter_index == @answer.length - 1
+    end
+
+    def letter_matches(letter)
+      [@answer[@answer_letter_index], '*'].include? letter
     end
   end
 end
