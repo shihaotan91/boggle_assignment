@@ -1,6 +1,8 @@
 module GameBoard
   module CheckAnswer
-    def check_answer(dictionary_details)
+    def check_answer
+      dictionary_details = Rails.cache.fetch(Game::DICTIONARY_DETAILS)
+
       check_for_invalid_characters
       check_answer_length(dictionary_details[:min_length], dictionary_details[:max_length])
       check_if_answer_is_in_dictionary(dictionary_details[:grouped_dictionary])

@@ -7,18 +7,31 @@ module GameBoard
       @game = game
       @board = game.board
       @result = result
-      @answer = answer
+      @answer = answer.upcase
       @found = false
       @response = { errors: [] }
-      dictionary_details = Rails.cache.fetch(Game::DICTIONARY_DETAILS)
 
-      validate_answer(dictionary_details)
+      validate_answer
     end
 
-    def validate_answer(dictionary_details)
-      check_answer(dictionary_details)
+    def validate_answer
+      check_answer
       return @response[:errors] unless @response[:errors].empty?
+
       find_answer
+
+      if @found
+        update_result
+        @response[:success] = "#{@answer} is a valid word"
+      else
+        @response[:errors] << "#{@answer} cannot be found on game board"
+        @response[:errors]
+      end
+    end
+
+    def update_result
+      @result.correct_answers << @answer
+      @result.save
     end
   end
 end
