@@ -29,8 +29,7 @@ module GameBoard
     end
 
     def check_duplicated_answers
-      all_answers = @result.correct_answers
-      if all_answers.include? @answer
+      if @result.correct_answers.include? @answer
         @response[:errors] << "You've answered correctly with this word(#{@answer}) before"
       end
     end
