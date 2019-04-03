@@ -3,7 +3,7 @@ namespace :game do
   task cache_dictionary_details: :environment do
     dictionary = I18n.t("games.dictionary")
     grouped_dictionary = dictionary.group_by do |word|
-      "#{word[0..1]}_#{word.length}"
+      "#{word[0..1].upcase}_#{word.length}"
     end
     possible_word_lengths = dictionary.map do |word|
       word.length
