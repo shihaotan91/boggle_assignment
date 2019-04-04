@@ -32,6 +32,8 @@ module GameBoard
       unless answer_group.include? @answer.downcase
         return @response[:errors] << 'Word cannot be found in dictionary'
       end
+
+      check_duplicated_answers
     end
 
     def check_duplicated_answers
