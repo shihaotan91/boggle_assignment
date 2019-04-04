@@ -17,7 +17,10 @@ module GameBoard
     end
 
     def check_if_answer_is_in_dictionary(grouped_dictionary)
-      unless grouped_dictionary["#{@answer[0..1]}_#{@answer.length}"].include? @answer.downcase
+      answer_group = grouped_dictionary["#{@answer[0..1]}_#{@answer.length}"]
+      return unless answer_group
+
+      unless answer_group.include? @answer.downcase
         @response[:errors] << 'Word cannot be found in dictionary'
       end
     end

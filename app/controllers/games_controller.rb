@@ -1,8 +1,10 @@
 class GamesController < ApplicationController
+  skip_before_action :verify_authenticity_token
+
   def show
     @game = Game.find_by(token: params[:token])
     respond_to do |format|
-      format.html { render template: 'games/show' }
+      format.html { render template: 'games/show', status: :ok }
       format.json { render json: @game.to_json, status: :ok }
     end
   end
@@ -23,8 +25,12 @@ class GamesController < ApplicationController
   def play
     game = Game.find_by(token: game_params[:token])
     if game
-      response = GameBoard::ValidateAnswer.new(game, game_params[:answer])
-      render json: response, status: :ok
+      result = GameBoard::ValidateAnswer.new(game, game_params[:answer])
+      if result.response[:errors].empty?
+        render json: result.response[:success], status: :ok
+      else
+        render json: result.response[:errors], status: :ok
+      end
     else
       error = 'Invalid game token'
       render json: error, status: :unprocessable_entity
