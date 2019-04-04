@@ -1,19 +1,28 @@
 module GameBoard
   module CheckAnswer
     def check_answer
-      dictionary_details = Rails.cache.fetch(Game::DICTIONARY_DETAILS)
-
       check_for_invalid_characters
-      check_answer_length(dictionary_details[:min_length], dictionary_details[:max_length])
-      check_if_answer_is_in_dictionary(dictionary_details[:grouped_dictionary])
-      check_duplicated_answers
     end
 
     def check_for_invalid_characters
       alphabet_regex = /^[a-zA-Z]+$/
       unless @answer.match(alphabet_regex)
-        @response[:errors] << 'Your answer must contain only letters'
+        return @response[:errors] << 'Your answer must contain only letters'
       end
+
+      check_answer_length
+    end
+
+    def check_answer_length
+      dictionary_details = Rails.cache.fetch(Game::DICTIONARY_DETAILS)
+      min_length = dictionary_details[:min_length]
+      max_length = dictionary_details[:max_length]
+
+      unless @answer.length.between?(min_length, max_length)
+        return @response[:errors] << "Word length must be between #{min_length} and #{max_length}"
+      end
+
+      check_if_answer_is_in_dictionary(dictionary_details[:grouped_dictionary])
     end
 
     def check_if_answer_is_in_dictionary(grouped_dictionary)
@@ -21,13 +30,7 @@ module GameBoard
       return unless answer_group
 
       unless answer_group.include? @answer.downcase
-        @response[:errors] << 'Word cannot be found in dictionary'
-      end
-    end
-
-    def check_answer_length(min_length, max_length)
-      unless @answer.length.between?(min_length, max_length)
-        @response[:errors] << "Word length must be between #{min_length} and #{max_length}"
+        return @response[:errors] << 'Word cannot be found in dictionary'
       end
     end
 

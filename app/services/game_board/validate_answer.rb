@@ -3,9 +3,10 @@ module GameBoard
     include CheckAnswer
     include FindAnswer
 
+    attr_reader :response
+
     def initialize(game, answer)
       @game = game
-      @board = game.board
       @result = Result.find_by(game_id: game.id)
       @answer = answer.upcase
       @found = false
