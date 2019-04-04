@@ -4,6 +4,7 @@ class Game < ApplicationRecord
   after_create :create_result
 
   validates :token, uniqueness: true
+  has_one :result, dependent: :destroy
 
   def generate_game_details
     generate_board
