@@ -14,10 +14,14 @@ class Game < ApplicationRecord
   end
 
   def generate_board
-    possible_letters = ('A'..'Z').to_a
-    wildcards = ['*', '*']
-    letters_board = (0..13).map { possible_letters[rand(26)] } + wildcards
-    self.board = letters_board.shuffle.each_slice(4).to_a
+    vowels = %w(A E I O U).sample(2)
+    consonance = %w(R S T L N E).sample(4)
+    wildcards = %w(* *).sample(2)
+    random_letters = ('A'..'Z').to_a.sample(8)
+
+    letter_board = vowels + consonance + wildcards + random_letters
+
+    self.board = letter_board.shuffle.each_slice(4).to_a
   end
 
   def generate_token
