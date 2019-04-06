@@ -26,11 +26,10 @@ module GameBoard
 
     def check_if_answer_is_in_dictionary(grouped_dictionary)
       answer_group = grouped_dictionary["#{@answer[0..1]}_#{@answer.length}"]
-      return unless answer_group
+      error_message = 'Word cannot be found in dictionary'
 
-      unless answer_group.include? @answer.downcase
-        return @response[:error_messages] << 'Word cannot be found in dictionary'
-      end
+      return @response[:error_messages] << error_message if answer_group.nil?
+      return @response[:error_messages] << error_message if answer_group.exclude? @answer.downcase
 
       check_duplicated_answers
     end
