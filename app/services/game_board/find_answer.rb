@@ -7,7 +7,7 @@ module GameBoard
 
       starting_coordinates.each do |coord|
         break if @found
-        restore_letter_index
+        restore_used_coordinates_and_letter_index
         find_letter_on_board(neighbours(coord), coord)
       end
     end
@@ -38,23 +38,20 @@ module GameBoard
     end
 
     def find_letter_on_board(neighbours, current_coord)
+      return if word_found
+
       valid_neighbours = neighbours - @used_coordinates
 
       valid_neighbours.each do |neighbour|
-        mark_used_coordinate_from_board(current_coord)
         break if @found
+        mark_used_coordinate_from_board(current_coord)
 
         if letter_matches(board_letter(neighbour))
-          if last_letter_of_answer
-            @found = true
-          else
-            @answer_letter_index += 1
-            find_letter_on_board(neighbours(neighbour), neighbour)
-          end
+          @answer_letter_index += 1
+          find_letter_on_board(neighbours(neighbour), neighbour)
         end
       end
-      restore_used_coordinates
-      restore_letter_index
+      restore_used_coordinates_and_letter_index
     end
 
     def board_letter(coordinates)
@@ -62,19 +59,18 @@ module GameBoard
     end
 
     def mark_used_coordinate_from_board(coordinate)
+      return if @used_coordinates.include? coordinate
       @used_coordinates << coordinate
     end
 
-    def restore_letter_index
+    def restore_used_coordinates_and_letter_index
       @answer_letter_index = 1
-    end
-
-    def restore_used_coordinates
       @used_coordinates = []
     end
 
-    def last_letter_of_answer
-      @answer_letter_index == @answer.length - 1
+    def word_found
+      return @found = true if @answer_letter_index == @answer.length
+      @found
     end
 
     def letter_matches(letter)
