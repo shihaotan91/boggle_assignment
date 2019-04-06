@@ -37,4 +37,17 @@ class Game < ApplicationRecord
   def create_result
     Result.create(game_id: id)
   end
+
+  def pretty_board
+    board.map { |row| row.join(' ') }
+  end
+
+  def time_left
+    time_left = end_time.to_i - DateTime.now.to_i
+    if time_left.negative?
+      "This game has completed"
+    else
+      "#{time_left} seconds"
+    end
+  end
 end

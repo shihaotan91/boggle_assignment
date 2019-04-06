@@ -11,7 +11,7 @@ module GameBoard
         find_letter_on_board(neighbours(coord), coord)
       end
     end
-    
+
     def starting_coordinates
       starting_coordinates = []
 

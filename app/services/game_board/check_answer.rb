@@ -2,15 +2,14 @@ module GameBoard
   module CheckAnswer
     def check_answer
       check_for_invalid_characters
+      check_answer_length
     end
 
     def check_for_invalid_characters
       alphabet_regex = /^[a-zA-Z]+$/
       unless @answer.match(alphabet_regex)
-        return @response[:errors] << 'Your answer must contain only letters'
+        return @response[:error_messages] << 'Your answer must contain only letters'
       end
-
-      check_answer_length
     end
 
     def check_answer_length
@@ -19,7 +18,7 @@ module GameBoard
       max_length = dictionary_details[:max_length]
 
       unless @answer.length.between?(min_length, max_length)
-        return @response[:errors] << "Word length must be between #{min_length} and #{max_length}"
+        return @response[:error_messages] << "Word length must be between #{min_length} and #{max_length} characters"
       end
 
       check_if_answer_is_in_dictionary(dictionary_details[:grouped_dictionary])
@@ -30,7 +29,7 @@ module GameBoard
       return unless answer_group
 
       unless answer_group.include? @answer.downcase
-        return @response[:errors] << 'Word cannot be found in dictionary'
+        return @response[:error_messages] << 'Word cannot be found in dictionary'
       end
 
       check_duplicated_answers
@@ -38,7 +37,7 @@ module GameBoard
 
     def check_duplicated_answers
       if @result.correct_answers.include? @answer
-        @response[:errors] << "You've answered correctly with this word(#{@answer}) before"
+        @response[:error_messages] << "You've answered correctly with this word(#{@answer}) before"
       end
     end
   end

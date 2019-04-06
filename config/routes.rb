@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
-  resources :games, only: %i[create show], param: :token
+  resources :games, only: %i[create]
   put 'games/play'
 end
