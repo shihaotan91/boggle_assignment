@@ -23,6 +23,11 @@ class GamesController < ApplicationController
   end
 
   def play
+    if game_params[:token].blank? || game_params[:answer].blank?
+      error = 'You need to provide a game token and answer to play'
+      return render json: error, status: :unprocessable_entity
+    end
+
     game = Game.find_by(token: game_params[:token])
     if game
       result = GameBoard::ValidateAnswer.new(game, game_params[:answer])
