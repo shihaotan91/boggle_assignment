@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  skip_before_action :verify_authenticity_token
+  skip_before_action :verify_authenticity_token, only: %i[create play]
 
   def show
     @game = Game.find_by(token: params[:token])
