@@ -8,14 +8,12 @@ class GamesController < ApplicationController
       new_game_json = {
         board: @new_game.pretty_board,
         token: @new_game.token,
-        success_message: 'New game created! You have 5mins to play'
+        success_message: 'New game created! You have 5 mins to play this game'
       }
       render json: new_game_json, status: :created
     else
-      new_game_error_json = {
-        error_message: @new_game.errors.messages
-      }
-      render json: new_game_error_json, status: :unprocessable_entity
+      error_json = { error_message: @new_game.errors.messages }
+      render json: error_json, status: :internal_server_error
     end
   end
 

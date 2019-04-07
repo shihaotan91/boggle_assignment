@@ -8,7 +8,7 @@ module GameBoard
     def check_for_invalid_characters
       alphabet_regex = /^[a-zA-Z]+$/
       unless @answer.match(alphabet_regex)
-        return @response[:error_messages] << 'Your answer must contain only letters'
+        @response[:error_messages] << 'Your answer must contain only letters'
       end
     end
 
@@ -18,8 +18,10 @@ module GameBoard
       max_length = dictionary_details[:max_length]
 
       unless @answer.length.between?(min_length, max_length)
-        return @response[:error_messages] << "Word length must be between #{min_length} and #{max_length} characters"
+        @response[:error_messages] << "Word length must be between #{min_length} and #{max_length} characters"
       end
+
+      return unless @response[:error_messages].empty?
 
       check_if_answer_is_in_dictionary(dictionary_details[:grouped_dictionary])
     end
