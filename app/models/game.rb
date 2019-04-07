@@ -1,6 +1,6 @@
 class Game < ApplicationRecord
   DICTIONARY_DETAILS = 'dictionary_details'.freeze
-  after_create :generate_game_details
+  before_create :generate_game_details
   after_create :create_result
 
   validates :token, uniqueness: true
@@ -10,7 +10,6 @@ class Game < ApplicationRecord
     generate_board
     generate_token
     generate_start_and_end_time
-    save
   end
 
   def generate_board
@@ -45,7 +44,7 @@ class Game < ApplicationRecord
   def time_left
     time_left = end_time.to_i - DateTime.now.to_i
     if time_left.negative?
-      "This game has completed"
+      'This game has completed'
     else
       "#{time_left} seconds"
     end
