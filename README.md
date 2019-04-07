@@ -94,9 +94,9 @@ Each game only last for 5minutes. So if you try to call the PUT API endpoint aft
 
 Have fun playing!
 
-##Design implementations
+## Design implementations
 
-###Models
+### Models
 
 I decided to create two models for this application: Game and Result.
 
@@ -109,7 +109,7 @@ In terms of model design, the Game model stores all attributes related to how to
 
 And the Result model stores attributes related to the outcome of the game(points, correct_answers). 
 
-###Controllers
+### Controllers
 
 This application only has one controller(GamesController) with two methods in it. 
 
@@ -148,7 +148,7 @@ I also found all possible word lengths based on the provided dictionary and stor
 
 Using `Rails.cache` I cached the grouped dictionary and shortest/longest word length in Redis through a rake file. This rake file can be run anytime the dictionary is updated.
 
-###Services
+### Services
 
 As not to clog up the controllers or models with game logic, I created a service class(`GameBoard::ValidateAnswer`) to handle the validation of an answer.
 
